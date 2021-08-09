@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const todosRoutes = require('./routes/todos');
 
 const mongodb =  require('./dbkeys');
 
@@ -26,6 +27,14 @@ mongoose.connect(mongodb, {useNewUrlParser: true, useUnifiedTopology: true})
         console.log(err);
     });
 
+/************************************
+ * ROUTES
+ ***********************************/
+
+// HOME
 app.get('/', (req, res) => {
     res.send('Welcome MF!');
 });
+
+// TODOS ROUTES
+app.use('/todos', todosRoutes);

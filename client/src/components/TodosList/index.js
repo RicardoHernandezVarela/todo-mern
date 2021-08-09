@@ -1,16 +1,10 @@
 import React from 'react';
 
-function TodosList() {
-    const items = [
-        {name: 'Akvin 1'},
-        {name: 'Akvin 2'},
-        {name: 'Akvin 3'},
-        {name: 'Akvin 4'}
-    ];
+function TodosList({items}) {
+
     const [active, setActive] = React.useState(0);
 
     const onClick = (index) => {
-        console.log('CLICKED !!', active);
         setActive(index);
     }
 
@@ -21,7 +15,7 @@ function TodosList() {
                     <a key={index} href="#!" 
                         className={`collection-item ${active === index ? 'active' : null}`} 
                         onClick={() => onClick(index)}>
-                        {item.name}
+                        {item.title}
                     </a>
                 );
             })}
