@@ -22,4 +22,15 @@ const readTodos = async () => {
     }
 };
 
-export { readTodos, createTodo };
+// READ TODOS
+const updateTodo = async (id, updatedTodo) => {
+    try {
+        const { data } = await api.updateTodo(id, updatedTodo);
+        return data;
+        
+    } catch (error) {
+        return error;
+    }
+};
+
+export { readTodos, createTodo, updateTodo };

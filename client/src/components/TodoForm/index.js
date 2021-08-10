@@ -1,14 +1,47 @@
 import React from 'react';
 
-function TodoForm({ addTodo }) {
-    const [todo, setTodo] = React.useState({
+function TodoForm({ addOrEditTodo, optionSelected }) {
+    const INITIAL_TODO = {
         title: '',
-        content: ''
+        content: '',
+    };
+
+    const [todo, setTodo] = React.useState(INITIAL_TODO);
+    const [submitButton, setSubmitButton] = React.useState(true);
+
+    // ESC key pressed --> reset todo values and submit state
+    React.useEffect(() => {
+        const clear = (event) => {
+            if (event.keyCode === 27) {
+                setTodo(INITIAL_TODO);
+                setSubmitButton(true);
+            }
+        }
+
+        window.addEventListener('keydown', clear);
+
+        return () => window.removeEventListener('keydown', clear);
     });
 
+    // Change submit state and set item to edit
+    React.useEffect(() => {
+        if (optionSelected !== undefined && optionSelected.option === 'edit') {
+            setTodo({
+                title: optionSelected.item.title,
+                content: optionSelected.item.content
+            });
+
+            setSubmitButton(false);
+        }
+    }, [optionSelected]);
+
+    // Submit / Save changes button pressed
     const onSubmit = async (event) => {
         event.preventDefault();
-        addTodo(todo);
+        addOrEditTodo(todo, optionSelected.item._id, submitButton, optionSelected.index);
+        setTodo(INITIAL_TODO);
+        setSubmitButton(true);
+        //console.log(optionSelected !== undefined ? optionSelected.item._id : 'mmm');
     };
 
     return (
@@ -19,21 +52,27 @@ function TodoForm({ addTodo }) {
                         <i className="material-icons prefix">title</i>
                         <input id="icon_prefix" type="text" 
                                 className="validate" 
-                                onChange={(event) => setTodo({...todo, title: event.target.value})} />
-                        <label htmlFor="icon_prefix">Title</label>
+                                onChange={(event) => setTodo({...todo, title: event.target.value})}
+                                placeholder={'Title'}
+                                value={todo.title} />
+                        {/* <label htmlFor="icon_prefix">Title</label> */}
                     </div>
 
                     <div className="input-field col s6">
                         <i className="material-icons prefix">description</i>
                         <input id="icon_telephone" type="tel" 
                             className="validate"
-                            onChange={(event) => setTodo({...todo, content: event.target.value})} />
-                        <label htmlFor="icon_telephone">Content</label>
+                            onChange={(event) => setTodo({...todo, content: event.target.value})}
+                            placeholder={'Content'}
+                            value={todo.content} />
+                        {/* <label htmlFor="icon_telephone">Content</label> */}
                     </div>
                 </div>
 
                 <div className="row right-align">
-                    <button className="btn">Submit</button>
+                    <button className="btn">
+                        {submitButton === true ? "Submit" : "Save changes"}
+                    </button>
                 </div>
             </form>
         </div>

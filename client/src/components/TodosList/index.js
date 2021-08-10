@@ -1,25 +1,38 @@
 import React from 'react';
 
-function TodosList({items}) {
+function TodosList({items, getOptionSelected}) {
 
-    const [active, setActive] = React.useState(0);
+    const [active, setActive] = React.useState({index: 0});
 
-    const onClick = (index) => {
-        setActive(index);
-    }
+    // On option selected
+    const optionSelected = (event, item, index) => {
+        event.preventDefault();
+        getOptionSelected(event.target.textContent, item, index);
+    };
 
     return (
-        <div className="collection">
+        <ul className="collection">
             {items.map((item, index) => {
                 return (
-                    <a key={index} href="#!" 
-                        className={`collection-item ${active === index ? 'active' : null}`} 
-                        onClick={() => onClick(index)}>
-                        {item.title}
-                    </a>
+                    <li className={`collection-item ${active.index === index ? 'active' : null}`} 
+                        key={item._id}
+                        onClick={() => setActive({...item, index})}>
+                        <div className="left-align">
+                            <h6>{item.title}</h6>
+                            <p>
+                                {item.content}
+                                <a href="/" className="secondary-content" onClick={(event) => optionSelected(event, item, index)}>
+                                    <i className="material-icons">edit</i>
+                                </a>
+                                <a href="/" className="secondary-content" onClick={(event) => optionSelected(event, item, index)}>
+                                    <i className="material-icons">delete</i>
+                                </a>
+                            </p>
+                        </div>
+                    </li>
                 );
             })}
-        </div>
+        </ul>
     );
 }
 
