@@ -44,4 +44,20 @@ const updateTodo = async (req, res) => {
     }
 };
 
-module.exports = { createTodo, readTodos, updateTodo };
+// DELETE TODO
+const deleteTodo = async (req, res) => {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(404).send(`The id ${id} is not valid`);
+    }
+
+    try {
+        await Todo.findByIdAndDelete(id);
+        res.json({msg: 'Todo deleted successfully!'});
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+module.exports = { createTodo, readTodos, updateTodo, deleteTodo };

@@ -12,9 +12,14 @@ const readTodos = () => {
     return axios.get(url);
 };
 
-// CREATE TODO
+// UPDATE TODO
 const updateTodo = (id, updatedTodo) => {
     return axios.patch(`${url}/${id}`, updatedTodo);
 };
 
-export { readTodos, createTodo, updateTodo }
+// UPDATE TODO
+const deleteTodo = (id) => {
+    return axios.delete(`${url}/${id}`);
+};
+
+export { readTodos, createTodo, updateTodo, deleteTodo }

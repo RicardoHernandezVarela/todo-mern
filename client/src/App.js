@@ -2,7 +2,7 @@ import React from 'react';
 import Preloader from './components/Preloader';
 import TodoForm from './components/TodoForm';
 import TodosList from './components/TodosList';
-import {readTodos, createTodo, updateTodo} from './functions';
+import {readTodos, createTodo, updateTodo, deleteTodo } from './functions';
  
 class App extends React.Component {
   constructor(props) {
@@ -18,6 +18,7 @@ class App extends React.Component {
     this.fetchData();
   }
 
+  // GET todos data
   fetchData = async () => {
     const response = await readTodos();
     this.setState({
@@ -27,13 +28,16 @@ class App extends React.Component {
     });
   };
 
+  // ADD new todo or EDIT one
   addOrEditTodo = async (todo, id, submitTrue, index) => {
 
     if (submitTrue) {
+      // add todo
       const response = await createTodo(todo);
       this.setState({data: [...this.state.data, response]});
 
     } else {
+      //edit todo
       const response = await updateTodo(id, todo);
       const dataCopy = this.state.data;
       dataCopy[index] = response;
@@ -41,9 +45,24 @@ class App extends React.Component {
     }
   };
 
+  // Check option selected from the todos list and delete if icon clicked
   getOptionSelected = (option, item, index) => {
-    this.setState({optionSelected: {option, item, index}});
-    //console.log({option, item});
+    if (option === 'edit') {
+      this.setState({optionSelected: {option, item, index}});
+    } else {
+      // option === 'delete'
+      this.removeTodo(item._id, index);
+    }  
+  };
+
+  // DELETE todo
+  removeTodo = async (id, index) => {
+    const response = await deleteTodo(id);
+    console.log(response);
+
+    const dataCopy = this.state.data;
+    dataCopy.splice(index, 1);
+    this.setState({data: [...dataCopy]});
   };
 
   render() {

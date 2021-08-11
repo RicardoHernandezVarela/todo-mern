@@ -37,11 +37,19 @@ function TodoForm({ addOrEditTodo, optionSelected }) {
 
     // Submit / Save changes button pressed
     const onSubmit = async (event) => {
+        let id = '';
+        let index = 0;
+
+        if (optionSelected !== undefined) {
+            id = optionSelected.item._id;
+            index = optionSelected.index;
+        }
+
         event.preventDefault();
-        addOrEditTodo(todo, optionSelected.item._id, submitButton, optionSelected.index);
+        addOrEditTodo(todo, id, submitButton, index);
         setTodo(INITIAL_TODO);
         setSubmitButton(true);
-        //console.log(optionSelected !== undefined ? optionSelected.item._id : 'mmm');
+        //console.log(optionSelected !== undefined ? id : 'mmm');
     };
 
     return (

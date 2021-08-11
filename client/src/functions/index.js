@@ -22,7 +22,7 @@ const readTodos = async () => {
     }
 };
 
-// READ TODOS
+// UPDATE TODOS
 const updateTodo = async (id, updatedTodo) => {
     try {
         const { data } = await api.updateTodo(id, updatedTodo);
@@ -33,4 +33,15 @@ const updateTodo = async (id, updatedTodo) => {
     }
 };
 
-export { readTodos, createTodo, updateTodo };
+// DELETE TODOS
+const deleteTodo = async (id) => {
+    try {
+        const { data } = await api.deleteTodo(id);
+        return data;
+        
+    } catch (error) {
+        return error;
+    }
+};
+
+export { readTodos, createTodo, updateTodo, deleteTodo };
