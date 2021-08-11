@@ -4,8 +4,6 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const todosRoutes = require('./routes/todos');
 
-const mongodb =  require('./dbkeys');
-
 // Express app conf
 const app = express();
 dotenv.config();
@@ -18,7 +16,7 @@ const PORT = process.env.PORT || 5000;
 mongoose.set('useFindAndModify', false);
 
 // mongodb connection
-mongoose.connect(mongodb, {useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connect(process.env.mongodb, {useNewUrlParser: true, useUnifiedTopology: true})
     .then(() => {
         console.log('connected to the db ✌');
         app.listen(PORT);

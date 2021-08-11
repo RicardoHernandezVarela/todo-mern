@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const url = 'http://localhost:5000/todos';
+const url = 'https://todosmern-app.herokuapp.com/todos'; //'http://localhost:5000/todos';
 
 // CREATE TODO
 const createTodo = (todo) => {

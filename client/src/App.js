@@ -9,8 +9,10 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      loading: true,
       data: [],
+      loading: true,
+      error: null,
+      optionSelected: undefined
     };
   }
 
@@ -21,11 +23,21 @@ class App extends React.Component {
   // GET todos data
   fetchData = async () => {
     const response = await readTodos();
-    this.setState({
-      data: response,
-      loading: false,
-      optionSelected: undefined
-    });
+
+    if (!response.isAxiosError) {
+      this.setState({
+        data: response,
+        loading: false,
+        optionSelected: undefined
+      });
+
+    } else {
+      this.setState({
+        loading: false,
+        error: response.message,
+        optionSelected: undefined
+      });
+    }
   };
 
   // ADD new todo or EDIT one
@@ -66,18 +78,20 @@ class App extends React.Component {
   };
 
   render() {
-    const {loading, data, optionSelected} = this.state;
+    const {loading, data, optionSelected, error} = this.state;
 
     return (
       <div className="center-align container">
-        <TodoForm addOrEditTodo={this.addOrEditTodo} optionSelected={optionSelected} />
-
+        {!error && (
+          <TodoForm addOrEditTodo={this.addOrEditTodo} optionSelected={optionSelected} />
+        )}
+        
         {loading && (
           <Preloader />
         )}
 
         {!loading && (
-          <TodosList items={data} getOptionSelected={this.getOptionSelected} />
+          <TodosList items={data} getOptionSelected={this.getOptionSelected} error={error} />
         )}
       </div>
     );
